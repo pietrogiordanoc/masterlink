@@ -1,339 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Line Board</title>
+    <!-- Link your CSS files here -->
+    <!-- Make sure you include the CSS for the sidebar layout and Remix Icons -->
+    <!-- Example (replace with your actual paths): -->
+    <link rel="stylesheet" href="path/to/your/sidebar-styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        /* Basic styles for the logo */
+        #page-logo {
+            width: 95px; /* Adjusted width based on "50% menos Grande" (50% of 190) */
+            height: auto; /* Allow height to adjust automatically to maintain aspect ratio */
+            margin-bottom: 20px; /* Space below the logo */
+            display: block; /* Ensure it's on its own line */
+            /* Ensure left alignment for the logo */
+            margin-left: 0; /* Explicitly align left */
+            margin-right: auto; /* Push it to the left */
+        }
+
+        /* Style for the main content area to remove left padding */
+        main.content {
+             /* Remove default left padding from the content container, ensuring content starts further left */
+            padding-left: 10px !important; /* Added a small left padding for readability */
+            padding-right: 20px; /* Keep or adjust right padding */
+            padding-top: 10px; /* Keep or adjust top padding */
+            padding-bottom: 20px; /* Keep or adjust bottom padding */
+             /* box-sizing: border-box; /* Ensure padding is included in total width if needed */
+        }
+
+        /* Add styles for active menu item if you want */
+         .sidebar-content .menu a.active {
+             background-color: rgba(255, 255, 255, 0.1); /* Example highlight */
+             color: #fff;
+         }
+
+         /* Optional: Style for the copy button feedback */
+         #copy-link-button {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+         }
+
+          /* Basic styles for the Issuu embed wrapper for responsiveness */
+          .issuu-embed-container {
+            position: relative;
+            padding-bottom: 70%; /* This creates a 70% aspect ratio (height is 70% of width) */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin-bottom: 20px; /* Space below the embed */
+            margin-left: 0; /* Ensure left alignment */
+            margin-right: 0;
+          }
+
+          .issuu-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
+
+           /* Style for the share link container */
+          .share-link-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap; /* Allows wrapping on small screens */
+            margin-left: 0; /* Ensure left alignment */
+            margin-right: 0;
+          }
+
+          .share-link-container span {
+            margin-right: 10px;
+            font-weight: bold;
+          }
+
+          .share-link-container a {
+            flex-grow: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-right: 10px;
+            color: #007bff; /* Bootstrap primary blue */
+            text-decoration: underline;
+             /* Reset font size/weight from menu styles if necessary */
+            font-size: initial;
+            font-weight: initial;
+          }
+
+         /*
+         Styles for iframe containers and blocked messages
+         */
+         .embedded-content-container {
+             margin-top: 20px; /* Space above iframe */
+             margin-bottom: 20px; /* Space below iframe */
+             width: 100%; /* Take full width */
+             height: 80vh; /* Example height */
+             border: 1px solid #ccc; /* Optional border */
+             overflow: hidden;
+             margin-left: 0;
+             margin-right: 0;
+             box-sizing: border-box;
+          }
+
+           .embedded-content-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+
+          .iframe-blocked-message {
+              background-color: #fff3cd;
+              border: 1px solid #ffecb5;
+              color: #856404;
+              padding: 15px;
+              margin-bottom: 20px; /* Space below message */
+              border-radius: 4px;
+              text-align: left;
+              margin-left: 0;
+              margin-right: 0;
+              width: 100%;
+              box-sizing: border-box;
+          }
+
+
+          /* Style for the dynamic content area to ensure left alignment */
+          #dynamic-content {
+              text-align: left; /* Ensure text and inline elements align left */
+              padding: 0; /* Remove any default padding */
+              margin: 0; /* Remove any default margin */
+              width: 100%; /* Take full available width */
+              box-sizing: border-box; /* Standard box model */
+          }
+
+           /* Ensure the direct wrapper div for page content doesn't introduce centering or padding */
+           #dynamic-content > div {
+               text-align: left; /* Ensure children align left */
+               margin: 0; /* Remove any potential auto or explicit margins */
+               padding: 0; /* Remove any potential padding */
+               width: 100%; /* Ensure it takes available width within dynamic-content */
+               box-sizing: border-box; /* Standard box model */
+           }
+
+           /* Style for the extracted Mailchimp list */
+           #archive-list {
+                display: block;
+                margin-top: 20px; /* Increased space above the list ("Separar un poco") */
+                margin-bottom: 30px; /* Increased space below the list ("Deja un poco de espacio Blanco") */
+                padding: 0; /* Remove default padding */
+                border-top: 1px solid #eee; /* Keep the top border */
+                list-style: none; /* Remove list bullets */
+                text-align: left; /* Ensure list items align left */
+           }
+
+           #archive-list li.campaign {
+               display: block;
+               list-style: none; /* Ensure no list bullets */
+               margin: 0; /* Remove default margins */
+               padding: 6px 0; /* Adjusted padding - Removed 10px right/left */
+               border-bottom: 1px solid #eee; /* Keep the bottom border */
+           }
+
+           #archive-list li.campaign a {
+               /* Reset link styles from sidebar if necessary */
+               color: #336699; /* Keep original Mailchimp link color */
+               text-decoration: underline; /* Keep original Mailchimp link underline */
+               font-weight: normal; /* Ensure font weight is normal */
+               font-size: 14px; /* Match Mailchimp list item font size */
+           }
+
+            /* Style for the 'Email Campaign Archive' h2 title */
+            #dynamic-content h2 {
+                 margin-top: 0; /* Remove default top margin */
+                 margin-bottom: 0; /* Remove default bottom margin */
+            }
+
+           /* Reduce margin-top for the first element inside dynamic content's wrapper div */
+           #dynamic-content > div > :first-child {
+               margin-top: 0; /* Ensure the very first element has no top margin */
+           }
+
+    </style>
+</head>
+<body>
+
 <div class="layout has-sidebar fixed-sidebar fixed-header">
-      <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
-        <a id="btn-collapse" class="sidebar-collapser"><i class="ri-arrow-left-s-line"></i></a>
-        <div class="image-wrapper">
-          <img src="assets/images/sidebar-bg.jpg" alt="sidebar background" />
-        </div>
-        <div class="sidebar-layout">
-          <div class="sidebar-header">
-            <div class="pro-sidebar-logo">
-              <div>P</div>
-              <h5>Primeline Masterlink</h5>
-            </div>
-          </div>
-          <div class="sidebar-content">
-            <nav class="menu open-current-submenu">
-              <ul>
-                <li class="menu-header"><span> GENERAL </span></li>
-                <li class="menu-item sub-menu">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-vip-diamond-fill"></i>
-                    </span>
-                    <span class="menu-title">Components</span>
-                    <span class="menu-suffix">
-                      <span class="badge primary">Hot</span>
-                    </span>
-                  </a>
-                  <div class="sub-menu-list">
-                    <ul>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Grid</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Layout</span>
-                        </a>
-                      </li>
-                      <li class="menu-item sub-menu">
-                        <a href="#">
-                          <span class="menu-title">Forms</span>
-                        </a>
-                        <div class="sub-menu-list">
-                          <ul>
-                            <li class="menu-item">
-                              <a href="#">
-                                <span class="menu-title">Input</span>
-                              </a>
-                            </li>
-                            <li class="menu-item">
-                              <a href="#">
-                                <span class="menu-title">Select</span>
-                              </a>
-                            </li>
-                            <li class="menu-item sub-menu">
-                              <a href="#">
-                                <span class="menu-title">More</span>
-                              </a>
-                              <div class="sub-menu-list">
-                                <ul>
-                                  <li class="menu-item">
-                                    <a href="#">
-                                      <span class="menu-title">CheckBox</span>
-                                    </a>
-                                  </li>
-                                  <li class="menu-item">
-                                    <a href="#">
-                                      <span class="menu-title">Radio</span>
-                                    </a>
-                                  </li>
-                                  <li class="menu-item sub-menu">
-                                    <a href="#">
-                                      <span class="menu-title">Want more ?</span>
-                                      <span class="menu-suffix">&#x1F914;</span>
-                                    </a>
-                                    <div class="sub-menu-list">
-                                      <ul>
-                                        <li class="menu-item">
-                                          <a href="#">
-                                            <span class="menu-prefix">&#127881;</span>
-                                            <span class="menu-title">You made it </span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="menu-item sub-menu">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-bar-chart-2-fill"></i>
-                    </span>
-                    <span class="menu-title">Charts</span>
-                  </a>
-                  <div class="sub-menu-list">
-                    <ul>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Pie chart</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Line chart</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Bar chart</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="menu-item sub-menu">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-shopping-cart-fill"></i>
-                    </span>
-                    <span class="menu-title">E-commerce</span>
-                  </a>
-                  <div class="sub-menu-list">
-                    <ul>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Products</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Orders</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">credit card</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="menu-item sub-menu">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-global-fill"></i>
-                    </span>
-                    <span class="menu-title">Maps</span>
-                  </a>
-                  <div class="sub-menu-list">
-                    <ul>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Google maps</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Open street map</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="menu-item sub-menu">
-                  <a href="#">
-                    <span class="menu-icon">
-                     <i class="ri-paint-brush-fill"></i>
-                    </span>
-                    <span class="menu-title">Theme</span>
-                  </a>
-                  <div class="sub-menu-list">
-                    <ul>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Dark</span>
-                        </a>
-                      </li>
-                      <li class="menu-item">
-                        <a href="#">
-                          <span class="menu-title">Light</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="menu-header" style="padding-top: 20px"><span> EXTRA </span></li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-book-2-fill"></i>
-                    </span>
-                    <span class="menu-title">Documentation</span>
-                    <span class="menu-suffix">
-                      <span class="badge secondary">Beta</span>
-                    </span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-calendar-fill"></i>
-                    </span>
-                    <span class="menu-title">Calendar</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-icon">
-                      <i class="ri-service-fill"></i>
-                    </span>
-                    <span class="menu-title">Examples</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-          <div class="sidebar-footer">
-            <div class="footer-box">
-              <div>
-                <img
-                  class="react-logo"
-                  src="https://user-images.githubusercontent.com/25878302/213938106-ca8f0485-3f30-4861-9188-2920ed7ab284.png"
-                  alt="react"
-                />
-              </div>
-              <div style="padding: 0 10px">
-                <span style="display: block; margin-bottom: 10px"
-                  >Pro sidebar is also available as a react package
-                </span>
-                <div style="margin-bottom: 15px">
-                  <img
-                    alt="preview badge"
-                    src="https://img.shields.io/github/stars/azouaoui-med/react-pro-sidebar?style=social"
-                  />
-                </div>
-                <div>
-                  <a href="https://github.com/azouaoui-med/react-pro-sidebar" target="_blank"
-                    >Check it out!</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
-      <div id="overlay" class="overlay"></div>
-      <div class="layout">
-        <main class="content">
-          <div>
-            <a id="btn-toggle" href="#" class="sidebar-toggler break-point-sm">
-              <i class="ri-menu-line ri-xl"></i>
-            </a>
-            <h1 style="margin-bottom: 0">Pro Sidebar</h1>
-            <span style="display: inline-block">
-              Responsive layout with advanced sidebar menu built with SCSS and vanilla Javascript
-            </span>
-            <br />
-            <span>
-              Full Code and documentation available on
-              <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank"
-                >Github</a
-              >
-            </span>
-            <div style="margin-top: 10px">
-              <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">
-                <img
-                  alt="GitHub stars"
-                  src="https://img.shields.io/github/stars/azouaoui-med/pro-sidebar-template?style=social"
-                />
-              </a>
-              <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">
-                <img
-                  alt="GitHub forks"
-                  src="https://img.shields.io/github/forks/azouaoui-med/pro-sidebar-template?style=social"
-                />
-              </a>
-            </div>
-          </div>
-          <div>
-            <h2>Features</h2>
-            <ul>
-              <li>Fully responsive</li>
-              <li>Collapsable sidebar</li>
-              <li>Multi level menu</li>
-              <li>RTL support</li>
-              <li>Customizable</li>
-            </ul>
-          </div>
-          <div>
-            <h2>Resources</h2>
-            <ul>
-              <li>
-                <a target="_blank" href="https://github.com/azouaoui-med/css-pro-layout">
-                  Css Pro Layout</a
-                >
-              </li>
-              <li>
-                <a target="_blank" href="https://github.com/popperjs/popper-core"> Popper Core</a>
-              </li>
-              <li>
-                <a target="_blank" href="https://remixicon.com/"> Remix Icons</a>
-              </li>
-            </ul>
-          </div>
-          <footer class="footer">
-            <small style="margin-bottom: 20px; display: inline-block">
-              © 2025 made with
-              <span style="color: red; font-size: 18px">&#10084;</span> by -
-              <a target="_blank" href="https://azouaoui.netlify.app"> Mohamed Azouaoui </a>
-            </small>
-            <br />
-            <div class="social-links">
-              <a href="https://github.com/azouaoui-med" target="_blank">
-                <i class="ri-github-fill ri-xl"></i>
-              </a>
-              <a href="https://twitter.com/azouaoui_med" target="_blank">
-                <i class="ri-twitter-fill ri-xl"></i>
-              </a>
-              <a href="https://codepen.io/azouaoui-med" target="_blank">
-                <i class="ri-codepen-fill ri-xl"></i>
-              </a>
-              <a href="https://www.linkedin.com/in/mohamed-azouaoui/" target="_blank">
-                <i class="ri-linkedin-box-fill ri-xl"></i>
-              </a>
-            </div>
-          </footer>
-        </main>
-        <div class="overlay"></div>
-      </div>
+  <!-- Start Sidebar -->
+  <aside id="sidebar" class="sidebar break-point-sm has-bg-image">
+    <a id="btn-collapse" class="sidebar-collapser"><i class="ri-arrow-left-s-line"></i></a>
+    <div class="image-wrapper">
+      <img src="assets/images/sidebar-bg.jpg" alt="sidebar background" />
     </div>
+    <div class="sidebar-layout">
+      <!-- Start Sidebar Header -->
+      <div class="sidebar-header">
+        <div class="pro-sidebar-logo">
+          <div>P</div>
+          <h5>PRIME LINE</h5>
+        </div>
+      </div>
+      <!-- End Sidebar Header -->
+
+      <!-- Start Sidebar Content -->
+      <div class="sidebar-content">
+        <nav class="menu open-current-submenu">
+          <ul>
+            <!-- Start Menu Header -->
+            <li class="menu-header"><span> MASTERLINK
+             </span></li>
+            <!-- End Menu Header -->
+
+            <!-- Start CATALOG WEB Menu Item -->
+            <li class="menu-item">
+              <a href="#" data-page="catalog-web"> <!-- Added data-page attribute -->
+                <span class="menu-icon">
+                  <i class="ri-book-fill"></i>
+                </span>
+                <span class="menu-title">CATALOG WEB</span>
+              </a>
+            </li>
+            <!-- End CATALOG WEB Menu Item -->
+
+            <!-- Start CATALOG FLIPPING BOOK Menu Item -->
+            <li class="menu-item">
+              <a href="#" data-page="flipping-book"> <!-- Added data-page attribute -->
+                <span class="menu-icon">
+                  <i class="ri-book-open-line"></i>
+                </span>
+                <span class="menu-title">CATALOG FLIPPING BOOK</span>
+              </a>
+            </li>
+            <!-- End CATALOG FLIPPING BOOK Menu Item -->
+
+            <!-- Start Prime Line Coffee WEB Menu Item -->
+            <li class="menu-item sub-menu">
+              <a href="#" data-page="coffee-web"> <!-- Added data-page attribute -->
+                <span class="menu-icon"><i class="ri-cup-fill"></i></i></span>
+                <span class="menu-title">Prime Line Coffee WEB</span>
+              </a>
+              <div class="sub-menu-list">
+                <ul>
+                  <li class="menu-item"><a href="#" data-page="coffee-web-web"> <span class="menu-title">Web</span></a></li> <!-- Added data-page attribute -->
+                  <li class="menu-item"><a href="#" data-page="coffee-web-form"> <span class="menu-title">Form</span></a></li> <!-- Added data-page attribute -->
+                </ul>
+              </div>
+            </li>
+            <!-- End Prime Line Coffee WEB Menu Item -->
+
+            <!-- Removed Separator -->
+
+            <!-- Start ENTREE Menu Item -->
+            <li class="menu-item">
+              <a href="#" data-page="entree"> <!-- Added data-page attribute -->
+                <span class="menu-icon"><i class="ri-global-fill"></i></span>
+                <span class="menu-title">ENTREE</span>
+              </a>
+            </li>
+            <!-- End ENTREE Menu Item -->
+
+            <!-- Start FLYERS Menu Item -->
+            <li class="menu-item">
+              <a href="#" data-page="flyers"> <!-- Added data-page attribute -->
+                <span class="menu-icon"><i class="ri-calendar-2-line"></i></span>
+                <span class="menu-title">FLYERS</span>
+              </a>
+            </li>
+            <!-- End FLYERS Menu Item -->
+
+            <!-- Start SPECIALS OF THE WEEK Menu Item (now a sub-menu) -->
+            <li class="menu-item sub-menu"> <!-- Changed to sub-menu -->
+              <!-- This parent link now triggers the archive list view -->
+              <a href="#" data-page="specials-archive-list"> <!-- Added data-page attribute for the list -->
+                <span class="menu-icon"><i class="ri-calendar-2-line"></i></span>
+                <span class="menu-title">SPECIALS OF THE WEEK</span>
+              </a>
+              <div class="sub-menu-list">
+                <ul>
+                    <!-- Removed individual campaign links as per instruction E -->
+                    <!-- <li class="menu-item"><a href="#" data-page="special-report-10349312"><span class="menu-title">FULL LIST</span></a></li> -->
+                    <!-- <li class="menu-item"><a href="#" data-page="special-report-10349312"><span class="menu-title">Reporte Campaña 10349312</span></a></li> -->
+                    <!-- <li class="menu-item"><a href="#" data-page="special-weekly-10349197"><span class="menu-title">Weekly Special 10349197</span></a></li> -->
+                    <!-- <li class="menu-item"><a href="#" data-page="special-weekly-10349010"><span class="menu-title">Weekly Special 10349010</span></a></li> -->
+                    <!-- <li class="menu-item"><a href="#" data-page="special-weekly-10348905"><span class="menu-title">Weekly Special 10348905</span></a></li> -->
+                    <!-- The list content will be loaded dynamically by clicking the parent "SPECIALS OF THE WEEK" -->
+                </ul>
+              </div>
+            </li>
+            <!-- End SPECIALS OF THE WEEK Menu Item -->
+
+
+            <!-- Start Menu Header -->
+            <li class="menu-header" style="padding-top: 20px"><span> EXTRA </span></li>
+            <!-- End Menu Header -->
+
+            <!-- Start Download Menu Item -->
+             <li class="menu-item">
+              <a href="#" data-page="download"> <!-- Added data-page attribute -->
+                <span class="menu-icon"><i class="ri-download-fill"></i></span>
+                <span class="menu-title">Download</span>
+              </a>
+            </li>
+            <!-- End Download Menu Item -->
+
+          </ul>
+        </nav>
+      </div>
+      <!-- End Sidebar Content -->
+      <!-- Removed sidebar-footer -->
+    </div>
+  </aside>
+  <!-- End Sidebar -->
+
+  <!-- Start Sidebar Overlay -->
+  <div id="overlay" class="overlay"></div>
+  <!-- End Sidebar Overlay -->
+
+  <!-- Start Main Content Layout Container -->
+  <div class="layout">
+    <!-- Start Main Content Area -->
+    <main class="content" id="main-content">
+      <!-- The toggle button stays here -->
+      <a id="btn-toggle" href="#" class="sidebar-toggler break-point-sm">
+        <i class="ri-menu-line ri-xl"></i>
+      </a>
+
+      <!-- Start Page Logo (Static) -->
+      <!-- REPLACE 'assets/images/your-logo.png' with the actual path or URL to your PNG logo file -->
+      <img src="https://static.wixstatic.com/media/aef350_fb48320d993d43468261e998dbbb7b99~mv2.png/v1/fill/w_302,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/A-%20Logo%20Prime%20Line%20600%20px%20PNG.png" alt="Prime Line Logo" id="page-logo">
+      <!-- End Page Logo -->
+
+      <!-- Container for dynamic content -->
+      <div id="dynamic-content">
+        <!-- Initial content goes here by default -->
+        <!-- The JavaScript will populate this div based on the menu clicked -->
+      </div>
+      <!-- Removed footer -->
+    </main>
+    <!-- End Main Content Area -->
+
+    <!-- Start Main Content Overlay -->
+    <div class="overlay"></div>
+    <!-- End Main Content Overlay -->
+  </div>
+  <!-- End Main Layout Container -->
+
+<!-- Start JavaScript -->
+<script>
+    // Get the container where dynamic content will be loaded
+    const dynamicContentArea = document.getElementById('dynamic-content');
+    // Get the sidebar element (used for event delegation)
+    const sidebarContent = document.querySelector('.sidebar-content');
+
+
+    // Function to handle the copy link functionality for the flipping book page
+    function setupCopyLink() {
+        const shareableLink = document.getElementById('shareable-link');
+        const copyButton = document.getElementById('copy-link-button');
+
+        // Check if the elements exist in the currently loaded DOM
+        if (shareableLink && copyButton) {
+            copyButton.addEventListener('click', function() {
+                const linkToCopy = shareableLink.href; // Get the full URL from the href attribute
+
+                // Use the modern Clipboard API
+                navigator.clipboard.writeText(linkToCopy).then(function() {
+                    // Success feedback
+                    const originalButtonText = copyButton.textContent;
+                    const originalBg = copyButton.style.backgroundColor;
+                    const originalColor = copyButton.style.color;
+                    const originalBorder = copyButton.style.border;
+
+                    copyButton.textContent = '¡Copiado!';
+                    copyButton.style.backgroundColor = '#d4edda'; // Light green
+                    copyButton.style.color = '#155724'; // Dark green text
+                    copyButton.style.border = '1px solid #c3e6cb'; // Green border
+
+
+                    // Reset button text and styles after a few seconds
+                    setTimeout(function() {
+                        copyButton.textContent = originalButtonText;
+                        copyButton.style.backgroundColor = originalBg; // Reset styles
+                        copyButton.style.color = originalColor;
+                        copyButton.style.border = originalBorder;
+                    }, 2000); // 2 seconds
+
+                }).catch(function(err) {
+                    // Error handling (e.g., if permission denied)
+                    console.error('Could not copy text: ', err);
+                    alert('Error al copiar el enlace. Por favor, cópialo manualmente.'); // Simple alert for failure
+                });
+            });
+        } else {
+            // This console log helps debug if elements aren't found after dynamic load
+             // console.warn('Copy elements (shareable-link or copy-link-button) not found in the dynamic content.'); // Keep this commented unless debugging
+        }
+    }
+
+
+    // Define content for each page/menu item using functions
+    const pageContentMap = {
+        'catalog-web': function() {
+            // Define the initial content structure here
+            return `
+                 <div>
+                   <h1>PRIME LINE BOARD</h1>
+                   <span style="display: inline-block">
+                     Información para todo el equipo administrativo
+                   </span>
+                   <br />
+                   <span>
+                     2da línea
+                     <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">GitHub</a> Line 1
+                   </span> Line 2
+                   <div style="margin-top: 10px">
+                     <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">
+                       <img alt="GitHub stars" src="https://img.shields.io/github/stars/azouaoui-med/pro-sidebar-template?style=social" />
+                     </a>
+                     <a href="https://github.com/azouaoui-med/pro-sidebar-template" target="_blank">
+                       <img alt="GitHub forks" src="https://img.shields.io/github/forks/azouaoui-med/pro-sidebar-template?style=social" />
+                     </a>
+                   </div>
+                 </div>
+                 <div>
+                   <h2>Features Page 1</h2>
+                   <ul>
+                     <li>Fully responsive Line A</li>
+                     <li>Collapsible sidebar Line B</li>
+                     <li>Multi-level menu Line C</li>
+                     <li>RTL support</li>
+                     <li>Customizable</li>
+                   </ul>
+                 </div>
+                 <div>
+                   <h2>Resources Page 2</h2>
+                   <ul>
+                     <li><a target="_blank" href="https://github.com/azouaoui-med/css-pro-layout">CSS Pro Layout</a> Line 1</li>
+                     <li><a target="_blank" href="https://popperjs/popper-core">Popper Core</a> 2</li>
+                     <li><a target="_blank" href="https://remixicon.com/">Remix Icons</a> 3</li>
+                   </ul>
+                 </div>
+             `;
+        },
+        'flipping-book': function() {
+            // The Issuu shareable link provided by the user
+            const shareLink = "https://issuu.com/primelinedist/docs/florida_spring_2021_compressed?fr=xPf9KFxE";
+            // The Issuu embed URL (derived from the share link or obtained from Issuu's embed options)
+            const embedUrl = "https://e.issuu.com/embed.html?u=primelinedist&d=florida_spring_2021_compressed";
+
+            // Return HTML for the flipping book page
+            return `
+                <div>
+                  <!-- Title as requested -->
+                  <h1>Prime Line Coffe</h1>
+                  <p>Aquí tienes el catálogo Flipping Book. Puedes verlo incrustado o compartir el enlace directo:</p>
+
+                  <!-- Shareable Link and Copy Button -->
+                  <div class="share-link-container">
+                    <span>Enlace para Compartir:</span>
+                    <a href="${shareLink}" id="shareable-link" target="_blank">
+                        ${shareLink}
+                    </a>
+                    <button id="copy-link-button">Copiar</button>
+                  </div>
+
+                  <!-- Issuu Embed Iframe -->
+                  <!-- Using the responsiveness container class -->
+                  <div class="issuu-embed-container">
+                       <iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
+                  </div>
+                </div>
+            `;
+        },
+        // --- Content for SPECIALS OF THE WEEK archive list (triggered by parent menu item) ---
+        'specials-archive-list': function() {
+             // Use the extracted HTML content here, removing the specified elements.
+             const homeArchiveUrl = 'https://us14.campaign-archive.com/home/?u=33b601da645292a14d7ad91fd&id=34f4602c29'; // Source URL for reference
+
+             // ******************************************************************
+             // EXTRACTED AND MODIFIED HTML CONTENT FROM THE PROVIDED MAILCHIMP SOURCE
+             // - Removed the main h1 "Weekly Special 10348905" (as requested previously)
+             // - Kept the h2 "Email Campaign Archive"
+             // - REMOVED the "from Prime Line Distributors" text (as requested in latest image)
+             // - REMOVED the "join our mailing list" button (as requested in latest image)
+             // - Kept the ul#archive-list with its content (margins adjusted in CSS)
+             // ******************************************************************
+             return `
+                 <div>
+                   <!-- Removed the h1 "Weekly Special 10348905" -->
+
+                   <h2>Email Campaign Archive</h2> <!-- Kept this h2 -->
+                   <!-- Removed the div with class "mailchimp-source-text" -->
+                   <!-- Removed the a tag with class "formEmailButton" -->
+
+                    <!-- Start Extracted Archive List -->
+                    <ul id="archive-list">
+                        <div class="display_archive">
+                            <li class="campaign">04/22/2025 - <a href="http://eepurl.com/jc8a5-/" title="Specials of the Week April 22th. 2025!" target="_blank">Specials of the Week April 22th. 2025!</a></li>
+                            <li class="campaign">04/16/2025 - <a href="http://eepurl.com/jcHQYU" title="Specials of the Week April 16th. 2025!" target="_blank">Specials of the Week April 16th. 2025!</a></li>
+                            <li class="campaign">04/08/2025 - <a href="http://eepurl.com/jb52GU" title="Specials of the Week April 8th. 2025!" target="_blank">Specials of the Week April 8th. 2025!</a></li>
+                            <li class="campaign">04/02/2025 - <a href="http://eepurl.com/jbDp3s" title="Specials of the Week April 2nd. 2025!" target="_blank">Specials of the Week April 2nd. 2025!</a></li>
+                            <li class="campaign">03/26/2025 - <a href="http://eepurl.com/jaZeIo" title="Specials of the Week March 25th. 2025!" target="_blank">Specials of the Week March 25th. 2025!</a></li>
+                            <li class="campaign">03/17/2025 - <a href="http://eepurl.com/jakItM" title="New! DOK DALL'AVA Prosciutto di San Daniele DOP" target="_blank">New! DOK DALL'AVA Prosciutto di San Daniele DOP</a></li>
+                            <li class="campaign">03/12/2025 - <a href="http://eepurl.com/i_Xlic" title="Specials of the Week March 12th. 2025!" target="_blank">Specials of the Week March 12th. 2025!</a></li>
+                            <li class="campaign">03/05/2025 - <a href="http://eepurl.com/i_qVxA" title="Specials of the Week March 5th. 2025! SOTW" target="_blank">Specials of the Week March 5th. 2025! SOTW</a></li>
+                            <li class="campaign">02/27/2025 - <a href="http://eepurl.com/i-ZdC6" title="Specials of the Week February 27th. 2025! SOTW" target="_blank">Specials of the Week February 27th. 2025! SOTW</a></li>
+                            <li class="campaign">02/26/2025 - <a href="http://eepurl.com/i-Tr0M" title="New! MULINO BIANCO Biscotti from Italy" target="_blank">New! MULINO BIANCO Biscotti from Italy</a></li>
+                            <li class="campaign">02/18/2025 - <a href="http://eepurl.com/i-fJBY" title="Specials of the Week February 18th. 2025!" target="_blank">Specials of the Week February 18th. 2025!</a></li>
+                            <li class="campaign">02/11/2025 - <a href="http://eepurl.com/i9Jys2" title="Specials of the Week February 11th. 2025!" target="_blank">Specials of the Week February 11th. 2025!</a></li>
+                            <li class="campaign">02/04/2025 - <a href="http://eepurl.com/i9bi8E" title="Specials of the Week February 4th. 2025!" target="_blank">Specials of the Week February 4th. 2025!</a></li>
+                            <li class="campaign">01/31/2025 - <a href="http://eepurl.com/i8UE2A" title="NEW! Introducing SAL DE RISO Artisan Gelato and Sorbetto from Amalfi, Italy PROMO PRICE" target="_blank">NEW! Introducing SAL DE RISO Artisan Gelato and Sorbetto from Amalfi, Italy PROMO PRICE</a></li>
+                            <li class="campaign">01/29/2025 - <a href="http://eepurl.com/i8JmDs" title="New! LEVONI Cured Meats Presliced and Snack Tray" target="_blank">New! LEVONI Cured Meats Presliced and Snack Tray</a></li>
+                            <li class="campaign">01/22/2025 - <a href="http://eepurl.com/i8jphQ" title="Specials of the Week January 22th. 2025!" target="_blank">Specials of the Week January 22th. 2025!</a></li>
+                            <li class="campaign">01/15/2025 - <a href="http://eepurl.com/i7UtC-/" title="Specials of the Week January 15th. 2025!" target="_blank">Specials of the Week January 15th. 2025!</a></li>
+                            <li class="campaign">01/13/2025 - <a href="http://eepurl.com/i7K-a6" title="New! NONNO NANNI Fresh Cheeses from Italy" target="_blank">New! NONNO NANNI Fresh Cheeses from Italy</a></li>
+                            <li class="campaign">01/08/2025 - <a href="http://eepurl.com/i7tgZg" title="PRIME LINE at The 2025 Las Vegas Winter Fancy Food Show!" target="_blank">PRIME LINE at The 2025 Las Vegas Winter Fancy Food Show!</a></li>
+                            <li class="campaign">01/07/2025 - <a href="http://eepurl.com/i7oYHo" title="Specials of the Week January 7th. 2025!" target="_blank">Specials of the Week January 7th. 2025!</a></li>
+                        </div>
+                    </ul>
+                    <!-- End Extracted Archive List -->
+                 </div>
+             `;
+        },
+        // --- Keep other page contents as they were ---
+        'coffee-web': function() {
+             return `
+                <div>
+                  <h1>Prime Line Coffee WEB Overview</h1>
+                  <p>Información general sobre la sección de Prime Line Coffee WEB.</p>
+                  <p>Haz click en los sub-items para ver detalles específicos.</p>
+                </div>
+            `;
+        },
+         'coffee-web-web': function() {
+             return `
+                <div>
+                  <h1>Prime Line Coffee - Web Section</h1>
+                  <p>Contenido específico de la parte Web de Prime Line Coffee.</p>
+                  <p>Aquí podrías poner un formulario de pedido online o detalles de productos.</p>
+                </div>
+            `;
+        },
+         'coffee-web-form': function() {
+             return `
+                <div>
+                  <h1>Prime Line Coffee - Form Section</h1>
+                  <p>Contenido específico de la parte de Formularios de Prime Line Coffee.</p>
+                  <p>Aquí podrías poner un formulario de contacto o de feedback.</p>
+                </div>
+            `;
+        },
+        'entree': function() {
+            return `
+                <div>
+                  <h1>ENTREE</h1>
+                  <p>Contenido para la sección ENTREE.</p>
+                  <p>Podría ser información sobre acceso o permisos.</p>
+                </div>
+            `;
+        },
+        'flyers': function() {
+            return `
+                <div>
+                  <h1>FLYERS</h1>
+                  <p>Contenido para la sección FLYERS.</p>
+                  <p>Aquí podrías mostrar una galería de flyers o enlaces para descargarlos.</p>
+                </div>
+            `;
+        },
+         'download': function() {
+            return `
+                <div>
+                  <h1>Download</h1>
+                  <p>Contenido para la sección Download.</p>
+                  <p>Enlaces a recursos descargables como PDFs, manuales, etc.</p>
+                </div>
+            `;
+        },
+        // Keep the iframe logic for 'special-report-10349312' if it still exists in your data/needs to be an iframe
+         'special-report-10349312': function() {
+             const campaignUrl = 'https://us14.admin.mailchimp.com/reports/show?id=10349312';
+              return `
+                 <div>
+                   <h1>Reporte Campaña 10349312</h1>
+                   <!-- Re-added the iframe message as this specific URL is an admin page -->
+                   <div class="iframe-blocked-message">
+                       <strong>Nota sobre la visualización:</strong> Es posible que el contenido de Mailchimp (Reporte) no se muestre directamente aquí debido a restricciones de seguridad del sitio de origen. Si no aparece, por favor, abre el enlace en una nueva pestaña usando el menú contextual de tu navegador (clic derecho sobre el ítem del menú) o copiando el enlace: <a href="${campaignUrl}" target="_blank">${campaignUrl}</a>
+                   </div>
+                    <!-- Embedded Mailchimp content -->
+                    <div class="embedded-content-container">
+                       <iframe src="${campaignUrl}" frameborder="0"></iframe>
+                   </div>
+                 </div>
+             `;
+        },
+        // Removed special-weekly-10349197, special-weekly-10349010, special-weekly-10348905 entries
+        // as they are now covered by the 'specials-archive-list' and the dynamic iframe loading.
+    };
+
+    // Use event delegation on a parent element that is always in the DOM
+    // This listener handles clicks on sidebar links with data-page attributes
+    sidebarContent.addEventListener('click', function(event) {
+        const link = event.target.closest('.menu a[data-page]');
+
+        if (link) {
+            event.preventDefault();
+            const pageKey = link.getAttribute('data-page');
+
+            if (pageContentMap[pageKey]) {
+                const newContentHTML = pageContentMap[pageKey]();
+                dynamicContentArea.innerHTML = newContentHTML;
+
+                document.querySelectorAll('.sidebar-content .menu a').forEach(item => item.classList.remove('active'));
+                link.classList.add('active');
+
+                if (pageKey === 'flipping-book') {
+                     setTimeout(setupCopyLink, 50);
+                }
+                // No special setup needed for 'specials-archive-list' here,
+                // the iframe loading for list items is handled by the second listener.
+
+            } else {
+                console.warn(`No content defined for page: ${pageKey}`);
+                 dynamicContentArea.innerHTML = `
+                    <div>
+                      <h1>Contenido no encontrado</h1>
+                      <p>No se ha definido contenido para este ítem del menú.</p>
+                    </div>
+                 `;
+            }
+        }
+    });
+
+    // NEW Listener: Handles clicks on links *within* the dynamically loaded archive list
+    dynamicContentArea.addEventListener('click', function(event) {
+        // Check if the clicked element or its closest ancestor is an <a> tag inside the #archive-list
+        const archiveLink = event.target.closest('#archive-list a');
+
+        if (archiveLink) {
+            event.preventDefault(); // Prevent the browser from navigating
+            const campaignUrl = archiveLink.href; // Get the URL of the campaign
+
+            // Clear the current dynamic content
+            dynamicContentArea.innerHTML = '';
+
+            // Add the "Nota sobre la visualización" message
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('iframe-blocked-message');
+            messageDiv.innerHTML = `
+                <strong>Nota sobre la visualización:</strong> Es posible que el contenido de Mailchimp no se muestre directamente aquí debido a restricciones de seguridad del sitio de origen. Si no aparece, por favor, abre el enlace en una nueva pestaña usando el menú contextual de tu navegador (clic derecho sobre el ítem del menú) o copiando el enlace: <a href="${campaignUrl}" target="_blank">${campaignUrl}</a>
+            `;
+            dynamicContentArea.appendChild(messageDiv);
+
+            // Create and append the iframe container and iframe
+            const iframeContainer = document.createElement('div');
+            iframeContainer.classList.add('embedded-content-container'); // Use the existing iframe container style
+
+            const iframe = document.createElement('iframe');
+            iframe.src = campaignUrl;
+            iframe.frameborder = '0';
+            iframe.allowfullscreen = true; // Add allowfullscreen if needed
+
+            iframeContainer.appendChild(iframe);
+            dynamicContentArea.appendChild(iframeContainer);
+        }
+    });
+
+
+    // Optional: Simulate a click on the default page ('catalog-web') when the page loads
+    const defaultLink = document.querySelector('.sidebar-content .menu a[data-page="catalog-web"]');
+    if (defaultLink) {
+       setTimeout(() => {
+          defaultLink.click();
+       }, 100);
+    }
+
+    // --- Existing sidebar toggle script ---
+     const btnToggle = document.getElementById('btn-toggle');
+     const sidebar = document.getElementById('sidebar');
+     const overlay = document.getElementById('overlay');
+
+     if(btnToggle && sidebar && overlay){
+        btnToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.toggle('collapsed');
+            overlay.classList.toggle('active');
+        });
+     }
+     if(overlay){
+         overlay.addEventListener('click', function() {
+             sidebar.classList.add('collapsed');
+             overlay.classList.remove('active');
+         });
+     }
+    // --- End existing sidebar toggle script ---
+
+</script>
+<!-- End JavaScript -->
+
+</body>
+</html>
